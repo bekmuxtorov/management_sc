@@ -21,6 +21,31 @@ DOCUMENT_TYPES = (
 )
 
 
+class Region(models.Model):
+    name = models.CharField(
+        verbose_name=_('Name'),
+        max_length=100
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class District(models.Model):
+    name = models.CharField(
+        verbose_name=_('Name'),
+        max_length=100
+    )
+    region = models.ForeignKey(
+        to=Region,
+        on_delete=models.CASCADE,
+        related_name='districts'
+    )
+
+    def __str__(self):
+        return ' | '.join([self.name, self.region.name])
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     type = models.CharField(
         max_length=13,
@@ -70,17 +95,23 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
         null=True
     )
-    salary_percentage = models.DecimalField(
+    salary_percentage = models.FloatField(
         verbose_name=_('Salary percentage'),
-        decimal_places=1,
         null=True,
         blank=True
     )
     sms_code = models.IntegerField(
         verbose_name=_('SMS code'),
-        max_length=8,
         blank=True,
         null=True
+    )
+    is_phone_verified = models.BooleanField(
+        verbose_name=_('Is phone verified'),
+        default=False
+    )
+    is_staff = models.BooleanField(
+        verbose_name=_("is staff"),
+        default=False
     )
     created_at = models.DateTimeField(
         verbose_name=_('Date of creation'),
