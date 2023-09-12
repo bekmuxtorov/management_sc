@@ -6,6 +6,9 @@ from .forms import UserChangeForm, UserCreationForm
 from . import models
 
 
+admin.site.site_header = _("Management SC Admin")
+admin.site.site_title = _("Management SC Administration")
+
 @admin.register(models.Region)
 class RegionAdmin(admin.ModelAdmin):
     list_display = ('name', 'district_count', 'study_center_count')
