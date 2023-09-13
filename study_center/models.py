@@ -50,6 +50,13 @@ class StudyCenter(models.Model):
         null=True
     )
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('Study center')
+        verbose_name_plural = f"1.{_('Study centers')}"
+
 
 class Subject(models.Model):
     name = models.CharField(
@@ -63,6 +70,10 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = _('Subject')
+        verbose_name_plural = f"3.{_('Subject')}"
 
 
 class SubjectGroup(models.Model):
@@ -132,8 +143,8 @@ class SubjectGroup(models.Model):
         return ' | '.join([self.name, self.teacher.full_name])
 
     class Meta:
-        verbose_name = _('StudyGroup')
-        verbose_name_plural = _('StudyGroups')
+        verbose_name = _('Study Group')
+        verbose_name_plural = f"2.{_('Study centers')}"
 
 
 class Time(models.Model):
@@ -144,7 +155,7 @@ class Time(models.Model):
 
     class Meta:
         verbose_name = _("Time")
-        verbose_name_plural = _("Times")
+        verbose_name_plural = f"4.{_('Times')}"
 
 
 class Day(models.Model):
@@ -155,7 +166,7 @@ class Day(models.Model):
 
     class Meta:
         verbose_name = _("Day")
-        verbose_name_plural = _("Day")
+        verbose_name_plural = f"5.{_('Days')}"
 
 
 class StudyDay(models.Model):
@@ -163,7 +174,7 @@ class StudyDay(models.Model):
         to='study_center.Day',
         on_delete=models.CASCADE,
         verbose_name=_('Day'),
-        related_name='s'
+        related_name='study_day'
     )
     time = models.ForeignKey(
         to='study_center.Time',
@@ -176,7 +187,7 @@ class StudyDay(models.Model):
 
     class Meta:
         verbose_name = _("StudyDay")
-        verbose_name_plural = _("StudyDays")
+        verbose_name_plural = f"6.{_('Study Days')}"
 
 
 class Room(models.Model):
@@ -202,14 +213,4 @@ class Room(models.Model):
 
     class Meta:
         verbose_name = _("Room")
-        verbose_name_plural = _("Rooms")
-
-
-class Message(models.Model):
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("")
-        verbose_name_plural = ("")
+        verbose_name_plural = f"7.{_('Rooms')}"
