@@ -36,6 +36,7 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 LOCAL_APPS = [
     'account',
     'study_center',
+    'letter',
 ]
 
 INSTALLED_APPS = [
