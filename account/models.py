@@ -31,6 +31,10 @@ class Region(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _('Region')
+        verbose_name_plural = f"4. { _('Regions')}"
+
 
 class District(models.Model):
     name = models.CharField(
@@ -45,6 +49,10 @@ class District(models.Model):
 
     def __str__(self):
         return ' | '.join([self.name, self.region.name])
+
+    class Meta:
+        verbose_name = _('District')
+        verbose_name_plural = f"5. { _('District')}"
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -121,6 +129,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.full_name
 
+    class Meta:
+        verbose_name = _('User')
+        verbose_name_plural = f"1. { _('Users')}"
+
 
 class TeacherUser(models.Model):
     user = models.OneToOneField(
@@ -145,6 +157,10 @@ class TeacherUser(models.Model):
     def __str__(self):
         return self.user.full_name
 
+    class Meta:
+        verbose_name = _('TeacherUser')
+        verbose_name_plural = f"2. { _('TeacherUsers')}"
+
 
 class StudentUser(models.Model):
     user = models.OneToOneField(
@@ -163,3 +179,7 @@ class StudentUser(models.Model):
 
     def __str__(self):
         return self.user.full_name
+
+    class Meta:
+        verbose_name = _('StudentUser')
+        verbose_name_plural = f"3. { _('StudentUsers')}"
