@@ -63,3 +63,153 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SubjectGroup(models.Model):
+    study_center = models.ForeignKey(
+        to=StudyCenter,
+        on_delete=models.CASCADE,
+        verbose_name=_('Study Center'),
+        related_name='subject_groups'
+    )
+    name = models.CharField(
+        max_length=50,
+        verbose_name=_('Name')
+    )
+    teacher = models.ForeignKey(
+        to='account.User',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        verbose_name=_('Teacher'),
+        related_name='subject_groups'
+    )
+    students = models.ManyToManyField(
+        to='account.StudentUser',
+        related_name='subject_groups',
+        null=True,
+        blank=True
+    )
+    subject = models.ForeignKey(
+        to=Subject,
+        on_delete=models.CASCADE,
+        verbose_name=_('Subject'),
+        related_name='subject_groups'
+    )
+    price = models.FloatField(
+        verbose_name=_('Price'),
+        blank=True,
+        null=True
+    )
+    room = models.ForeignKey(
+        to='study_center.Room',
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name='subject_groups'
+    )
+    study_day = models.ForeignKey(
+        to='study_center.StudyDay',
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name='subject_groups'
+    )
+    created_at = models.DateTimeField(
+        verbose_name=_('Date of creation'),
+        auto_now_add=True
+    )
+    updated_at = models.DateTimeField(
+        verbose_name=_('Update profile'),
+        auto_now=True,
+        blank=True,
+        null=True
+    )
+    start_at = models.DateField(verbose_name=_('Start at'), auto_now=True)
+    status = models.BooleanField(default=True)
+
+    def __str__(self):
+        return ' | '.join([self.name, self.teacher.full_name])
+
+    class Meta:
+        verbose_name = _('StudyGroup')
+        verbose_name_plural = _('StudyGroups')
+
+
+class Time(models.Model):
+    name = models.CharField(_('Name'), max_length=20)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _("Time")
+        verbose_name_plural = _("Times")
+
+
+class Day(models.Model):
+    name = models.CharField(_('Name'), max_length=50)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _("Day")
+        verbose_name_plural = _("Day")
+
+
+class StudyDay(models.Model):
+    day = models.ForeignKey(
+        to='study_center.Day',
+        on_delete=models.CASCADE,
+        verbose_name=_('Day'),
+        related_name='s'
+    )
+    time = models.ForeignKey(
+        to='study_center.Time',
+        on_delete=models.CASCADE,
+        verbose_name=_('Time')
+    )
+
+    def __str__(self):
+        return ' | '.join([self.day.name, self.time.name])
+
+    class Meta:
+        verbose_name = _("StudyDay")
+        verbose_name_plural = _("StudyDays")
+
+
+class Room(models.Model):
+    study_center = models.ForeignKey(
+        to=StudyCenter,
+        on_delete=models.CASCADE,
+        verbose_name=_('Study Center'),
+        related_name='rooms'
+    )
+    room_number = models.CharField(_('Room number'), max_length=50)
+    room_size = models.ImageField(_('Room size'))
+    teacher = models.ForeignKey(
+        to='account.User',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        verbose_name=_('Teacher'),
+        related_name='rooms'
+    )
+
+    def __str__(self):
+        return ' | '.join([self.room_number, self.teacher.full_name, self.study_center])
+
+    class Meta:
+        verbose_name = _("Room")
+        verbose_name_plural = _("Rooms")
+
+
+class Message(models.Model):
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _("")
+        verbose_name_plural = ("")
