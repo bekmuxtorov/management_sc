@@ -11,7 +11,8 @@ from .managers import UserManager
 USER_TYPE = (
     ('teacher', _('Teacher')),
     ('director', _('Director')),
-    ('adminstrator', _('Adminstrator'))
+    ('adminstrator', _('Adminstrator')),
+    ('student', _('Student'))
 )
 
 
@@ -88,18 +89,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
         null=True
     )
-    subjects = models.ForeignKey(
-        to="study_center.Subject",
-        on_delete=models.CASCADE,
-        related_name="users",
-        blank=True,
-        null=True
-    )
-    salary_percentage = models.FloatField(
-        verbose_name=_('Salary percentage'),
-        null=True,
-        blank=True
-    )
     sms_code = models.IntegerField(
         verbose_name=_('SMS code'),
         blank=True,
@@ -131,3 +120,46 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.full_name
+
+
+class TeacherUser(models.Model):
+    user = models.OneToOneField(
+        to=User,
+        on_delete=models.CASCADE,
+        verbose_name=_('User'),
+        related_name='teacher_user'
+    )
+    subject = models.ForeignKey(
+        to="study_center.Subject",
+        on_delete=models.CASCADE,
+        related_name="teacher_user",
+        blank=True,
+        null=True
+    )
+    salary_percentage = models.FloatField(
+        verbose_name=_('Salary percentage'),
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return self.user.full_name
+
+
+class StudentUser(models.Model):
+    user = models.OneToOneField(
+        to=User,
+        on_delete=models.CASCADE,
+        verbose_name=_('User'),
+        related_name='student_user'
+    )
+    subject = models.ForeignKey(
+        to="study_center.Subject",
+        on_delete=models.CASCADE,
+        related_name="student_user",
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+        return self.user.full_name

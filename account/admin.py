@@ -9,6 +9,7 @@ from . import models
 admin.site.site_header = _("Management SC Admin")
 admin.site.site_title = _("Management SC Administration")
 
+
 @admin.register(models.Region)
 class RegionAdmin(admin.ModelAdmin):
     list_display = ('name', 'district_count', 'study_center_count')
@@ -55,17 +56,8 @@ class AccountAdmin(BaseUserAdmin):
                     "phone_number",
                     "full_name",
                     "passport_or_id",
-                    "password_or_id_number"
-                )
-            },
-        ),
-        (
-            _("Teachers"),
-            {
-                "fields": (
+                    "password_or_id_number",
                     "study_center",
-                    "subjects",
-                    "salary_percentage"
                 )
             },
         ),
@@ -98,3 +90,26 @@ class AccountAdmin(BaseUserAdmin):
         if not change:
             obj.type = form.cleaned_data.get('type')
         super().save_model(request, obj, form, change)
+
+
+@admin.register(models.TeacherUser)
+class TeacherUserAdmin(admin.ModelAdmin):
+    list_display = ('get_full_name', 'get_study_center',
+                    'subject', 'salary_percentage')
+    search_fields = ('get_full_name', 'user__study_center',
+                     'subject', 'salary_percentage')
+    ordering = ('user__study_center', 'subject')
+
+    def get_full_name(self, instance): return instance.user.full_name
+
+    def get_study_center(self, instance): return instance.user.study_center
+
+
+@admin.register(models.StudentUser)
+class StudentUserAdmin(admin.ModelAdmin):
+    list_display = ('get_full_name', 'get_study_center', 'subject',)
+    search_fields = ('user__full_name', 'user__study_center', 'subject__name', )
+    ordering = ('user__study_center', 'subject__name')
+    def get_full_name(self, instance): return instance.user.full_name
+
+    def get_study_center(self, instance): return instance.user.study_center
