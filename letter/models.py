@@ -34,6 +34,7 @@ class Contact(models.Model):
         verbose_name=_('Type')
     )
     contact = models.CharField(_('Contact'), max_length=50)
+    create_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return ' | '.join([self.user, self.type])
@@ -61,14 +62,14 @@ class Message(models.Model):
         to="account.User",
         on_delete=models.CASCADE,
         related_name='reveiver_user',
-        verbose_name=_('Sender')
+        verbose_name=_('Reveiver')
     )
     message = models.TextField(_('Message text'))
     create_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
-        return ' -> '.join([self.sender, self.reveiver])
+        return ' -> '.join([str(self.sender), str(self.reveiver)])
 
     class Meta:
         verbose_name = 'Letter'
