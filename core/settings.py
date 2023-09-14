@@ -31,6 +31,7 @@ DEBUG = env.bool('DEBUG')
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
 
 # Application definition
 LOCAL_APPS = [
@@ -50,12 +51,14 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'drf_yasg',
+    'corsheaders',
 
 ] + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -152,9 +155,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'account.User'
 
+# Cors headers
+CORS_ORIGIN_ALLOW_ALL = True
+
 # REST_FRAMEWORK SETTINGS
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
-    ]
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 15
 }
