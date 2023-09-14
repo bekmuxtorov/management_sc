@@ -37,6 +37,7 @@ LOCAL_APPS = [
     'account',
     'study_center',
     'letter',
+    'payment',
 ]
 
 INSTALLED_APPS = [
