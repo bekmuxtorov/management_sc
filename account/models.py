@@ -33,7 +33,7 @@ class Region(models.Model):
 
     class Meta:
         verbose_name = _('Region')
-        verbose_name_plural = f"4. { _('Regions')}"
+        verbose_name_plural = f"4.{_('Regions')}"
 
 
 class District(models.Model):
@@ -52,7 +52,7 @@ class District(models.Model):
 
     class Meta:
         verbose_name = _('District')
-        verbose_name_plural = f"5. { _('District')}"
+        verbose_name_plural = f"5.{ _('District')}"
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -131,7 +131,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         verbose_name = _('User')
-        verbose_name_plural = f"1. { _('Users')}"
+        verbose_name_plural = f"1.{ _('Users')}"
 
 
 class TeacherUser(models.Model):
@@ -159,7 +159,7 @@ class TeacherUser(models.Model):
 
     class Meta:
         verbose_name = _('TeacherUser')
-        verbose_name_plural = f"2. { _('TeacherUsers')}"
+        verbose_name_plural = f"2.{ _('TeacherUsers')}"
 
 
 class StudentUser(models.Model):
@@ -182,4 +182,4 @@ class StudentUser(models.Model):
 
     class Meta:
         verbose_name = _('StudentUser')
-        verbose_name_plural = f"3. { _('StudentUsers')}"
+        verbose_name_plural = f"3.{ _('StudentUsers')}"
