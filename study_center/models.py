@@ -98,8 +98,6 @@ class SubjectGroup(models.Model):
     students = models.ManyToManyField(
         to='account.StudentUser',
         related_name='subject_groups',
-        null=True,
-        blank=True
     )
     subject = models.ForeignKey(
         to=Subject,
@@ -144,7 +142,7 @@ class SubjectGroup(models.Model):
 
     class Meta:
         verbose_name = _('Study Group')
-        verbose_name_plural = f"2.{_('Study centers')}"
+        verbose_name_plural = f"2.{_('Study Groups')}"
 
 
 class Time(models.Model):
