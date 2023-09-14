@@ -2,6 +2,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+DISCOUNT_TYPE = (
+    ('percentage', _('Percentage')),
+    ('money', _('Money'))
+)
+
+
 class Season(models.Model):
     name = models.CharField(_('Month'), max_length=100)
 
@@ -10,7 +16,7 @@ class Season(models.Model):
 
     class Meta:
         verbose_name = _('Season')
-        verbose_name_plural = _('Seasons')
+        verbose_name_plural = f"4.{_('Seasons')}"
 
 
 class PaymetType(models.Model):
@@ -21,13 +27,7 @@ class PaymetType(models.Model):
 
     class Meta:
         verbose_name = _('PaymetType')
-        verbose_name_plural = _('PaymetTypes')
-
-
-DISCOUNT_TYPE = (
-    ('percentage', _('Percentage')),
-    ('money', _('Money'))
-)
+        verbose_name_plural = f"3.{_('PaymetTypes')}"
 
 
 class Discount(models.Model):
@@ -46,13 +46,16 @@ class Discount(models.Model):
         max_length=10
     )
     value = models.IntegerField(_('Value'))
+    start_date = models.DateField(_('start_date'), auto_now=True)
+    end_date = models.DateField(_('end_date'), auto_now=True)
+    status = models.BooleanField(_('Status'), default=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name = _('Discount')
-        verbose_name_plural = _('Discounts')
+        verbose_name_plural = f"2.{_('Discounts')}"
 
 
 class Billing(models.Model):
@@ -101,8 +104,8 @@ class Billing(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.student.full_name
 
     class Meta:
         verbose_name = _('Billing')
-        verbose_name_plural = _('Billings')
+        verbose_name_plural = f"1.{_('Billings')}"
