@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework.authtoken',
     'drf_yasg',
     'corsheaders',
 
@@ -162,6 +163,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 15
