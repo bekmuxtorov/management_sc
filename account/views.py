@@ -39,7 +39,7 @@ class UserLoginAPIView(APIView):
                         "passport_or_id_number": "asdf",
                         "is_phone_verified": False,
                         "created_at": "2023-09-17T08:30:03.431503Z",
-                        "token": "Token 16f8b3b124ed2399c57997d2e6d24ec5dddc88e4",
+                        "token": "Token ec5dddc88e4",
                         "study_center": None
                     }
                 }
@@ -116,7 +116,7 @@ class DirectorRegisterAPIView(APIView):
                 description="User login",
                 examples={
                     'application/json': {
-                        "token": "2cbbb7a1d93994f6d1541994424e9f81cd055696",
+                        "token": "Token cd055696",
                         "type": "director",
                         "phone_number": "+998907778111",
                         "full_name": "Palonchiyev Pistonchi",
@@ -143,7 +143,7 @@ class DirectorRegisterAPIView(APIView):
             user = serializer.save()
             token = Token.objects.get_or_create(user=user)[0].key
             request_data = {
-                'token': token,
+                'token': f"Token {token}",
                 'type': user.type,
                 'phone_number': user.phone_number,
                 'full_name': user.full_name,
@@ -180,7 +180,7 @@ class AdminstratorRegisterAPIView(APIView):
                 description="User login",
                 examples={
                     'application/json': {
-                        "token": "2cbbb7a1d93994f6d1541994424e9f81cd055696",
+                        "token": "Toekn cd055696",
                         "type": "adminstrator",
                         "phone_number": "+998907778111",
                         "full_name": "Palonchiyev Pistonchi",
@@ -207,7 +207,7 @@ class AdminstratorRegisterAPIView(APIView):
             user = serializer.save()
             token = Token.objects.get_or_create(user=user)[0].key
             request_data = {
-                'token': token,
+                'token': f"Token {token}",
                 'type': user.type,
                 'phone_number': user.phone_number,
                 'full_name': user.full_name,
@@ -246,7 +246,7 @@ class TeacherRegisterAPIView(APIView):
                 description="User login",
                 examples={
                     'application/json': {
-                        "token": "2cbbb7a1d93994f6d1541994424e9f81cd055696",
+                        "token": "Token 1cd055696",
                         "type": "teacher",
                         "phone_number": "+998907778111",
                         "full_name": "Palonchiyev Pistonchi",
@@ -282,7 +282,7 @@ class TeacherRegisterAPIView(APIView):
             teacher_user, user = serializer.save()
             token = Token.objects.get_or_create(user=user)[0].key
             request_data = {
-                'token': token,
+                'token': f"Token {token}",
                 'type': user.type,
                 'phone_number': user.phone_number,
                 'full_name': user.full_name,
@@ -324,7 +324,7 @@ class StudentRegisterAPIView(APIView):
                 description="User login",
                 examples={
                     'application/json': {
-                        "token": "2cbbb7a1d93994f6d1541994424e9f81cd055696",
+                        "token": "Token 2cbbb7a1d939",
                         "type": "student",
                         "phone_number": "+998907778111",
                         "full_name": "Palonchiyev Pistonchi",
@@ -359,7 +359,7 @@ class StudentRegisterAPIView(APIView):
             student_user, user = serializer.save()
             token = Token.objects.get_or_create(user=user)[0].key
             request_data = {
-                'token': token,
+                'token': f"Token {token}",
                 'type': user.type,
                 'phone_number': user.phone_number,
                 'full_name': user.full_name,
