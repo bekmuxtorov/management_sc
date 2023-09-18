@@ -59,7 +59,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     type = models.CharField(
         max_length=13,
         choices=USER_TYPE,
-        default='teacher',
+        default='director',
         verbose_name=_('User type')
     )
     full_name = models.CharField(
@@ -84,7 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=_('passport'),
         max_length=11
     )
-    password_or_id_number = models.CharField(
+    passport_or_id_number = models.CharField(
         verbose_name=_('Password or ID number'),
         max_length=15,
         blank=True

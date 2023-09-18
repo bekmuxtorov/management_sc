@@ -13,4 +13,4 @@ class UserChangeForm(OldUserChangeForm):
     class Meta:
         model = User
         fields = ("phone_number", "type", "full_name", "study_center",
-                  "password_or_id_number", "is_staff", "is_superuser")
+                  "passport_or_id_number", "is_staff", "is_superuser")

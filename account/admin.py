@@ -56,7 +56,7 @@ class AccountAdmin(BaseUserAdmin):
                     "phone_number",
                     "full_name",
                     "passport_or_id",
-                    "password_or_id_number",
+                    "passport_or_id_number",
                     "study_center",
                 )
             },
