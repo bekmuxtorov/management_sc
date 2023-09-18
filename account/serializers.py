@@ -147,3 +147,54 @@ class TeacherRegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 'error': 'Both passwords do not match'
             })
+
+
+class StudentRegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True)
+    password2 = serializers.CharField(write_only=True, required=True)
+    phone_number = serializers.CharField(required=True)
+    full_name = serializers.CharField()
+    full_name = serializers.CharField()
+    passport_or_id = serializers.CharField()
+    passport_or_id_number = serializers.CharField()
+
+    class Meta:
+        model = models.StudentUser
+        fields = ('phone_number', 'full_name',
+                  'passport_or_id', 'passport_or_id_number', 'subject',  'password', 'password2')
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'password2': {'write_only': True},
+        }
+
+    def create(self, validated_data):
+        phone_number = validated_data.get('phone_number')
+        full_name = validated_data.get('full_name')
+        passport_or_id = validated_data.get('passport_or_id')
+        passport_or_id_number = validated_data.get('passport_or_id_number')
+        password = validated_data.get('password')
+        password2 = validated_data.get('password2')
+
+        subject = validated_data.get('subject')
+
+        if password == password2:
+            user = models.User(
+                type='student',
+                phone_number=phone_number,
+                full_name=full_name,
+                passport_or_id=passport_or_id,
+                passport_or_id_number=passport_or_id_number
+            )
+            user.set_password(password)
+            user.save()
+
+            student_user = models.TeacherUser(
+                user=user,
+                subject=subject,
+            )
+            student_user.save()
+            return student_user, user
+        else:
+            raise serializers.ValidationError({
+                'error': 'Both passwords do not match'
+            })
