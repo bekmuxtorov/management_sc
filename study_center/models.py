@@ -196,7 +196,7 @@ class Room(models.Model):
         related_name='rooms'
     )
     room_number = models.CharField(_('Room number'), max_length=50)
-    room_size = models.ImageField(_('Room size'))
+    room_size = models.IntegerField(_('Room size'))
     teacher = models.ForeignKey(
         to='account.User',
         on_delete=models.CASCADE,
@@ -207,7 +207,7 @@ class Room(models.Model):
     )
 
     def __str__(self):
-        return ' | '.join([self.room_number, self.teacher.full_name, self.study_center])
+        return ' | '.join([self.room_number, self.teacher.full_name, str(self.study_center.name)])
 
     class Meta:
         verbose_name = _("Room")
