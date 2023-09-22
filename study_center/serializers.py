@@ -21,7 +21,7 @@ class SubjectGroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TimesSerializer(serializers.ModelSerializer):
+class TimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Time
         fields = '__all__'
