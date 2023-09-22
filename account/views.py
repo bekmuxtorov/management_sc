@@ -374,3 +374,69 @@ class StudentRegisterAPIView(APIView):
             }
             return Response(request_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Region
+
+
+# Region Create API View
+class RegionCreateAPIVIew(generics.CreateAPIView):
+    queryset = models.Region.objects.all()
+    serializer_class = serializers.RegionSerializer
+
+
+# Region List API View
+class RegionListAPIView(generics.ListAPIView):
+    queryset = models.Region.objects.all()
+    serializer_class = serializers.RegionSerializer
+
+
+# Region Detail API View
+class RegionDetailAPIView(generics.RetrieveAPIView):
+    queryset = models.Region
+    serializer_class = serializers.RegionSerializer
+
+
+# Region Update API View
+class RegionUpdateAPIView(generics.UpdateAPIView):
+    queryset = models.Region.objects.all()
+    serializer_class = serializers.RegionSerializer
+
+
+# Region Delete API View
+class RegionDeleteAPIView(generics.DestroyAPIView):
+    queryset = models.Region.objects.all()
+    serializer_class = serializers.RegionSerializer
+
+
+# District
+
+
+# District Create API View
+class DistrictCreateAPIVIew(generics.CreateAPIView):
+    queryset = models.District.objects.all()
+    serializer_class = serializers.DistrictSerializer
+
+
+# District List API View
+class DistrictListAPIView(generics.ListAPIView):
+    queryset = models.District.objects.all()
+    serializer_class = serializers.DistrictSerializer
+
+
+# District Detail API View
+class DistrictDetailAPIView(generics.RetrieveAPIView):
+    queryset = models.District
+    serializer_class = serializers.DistrictSerializer
+
+
+# District Update API View
+class DistrictUpdateAPIView(generics.UpdateAPIView):
+    queryset = models.District.objects.all()
+    serializer_class = serializers.DistrictSerializer
+
+
+# Region Delete API View
+class DistrictDeleteAPIView(generics.DestroyAPIView):
+    queryset = models.District.objects.all()
+    serializer_class = serializers.DistrictSerializer
