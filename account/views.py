@@ -11,6 +11,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 from . import models
 from . import serializers
+from . import permissions as user_perm
 
 
 class UserLoginAPIView(APIView):
@@ -158,7 +159,7 @@ class DirectorRegisterAPIView(APIView):
 
 
 class AdminstratorRegisterAPIView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [user_perm.IsDirector]
     serializer_class = serializers.AdminstratorRegisterSerializer
 
     @swagger_auto_schema(
@@ -222,7 +223,7 @@ class AdminstratorRegisterAPIView(APIView):
 
 
 class TeacherRegisterAPIView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
     serializer_class = serializers.TeacherRegisterSerializer
 
     @swagger_auto_schema(
@@ -301,7 +302,7 @@ class TeacherRegisterAPIView(APIView):
 
 
 class StudentRegisterAPIView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
     serializer_class = serializers.StudentRegisterSerializer
 
     @swagger_auto_schema(

@@ -3,6 +3,7 @@ from rest_framework import generics
 
 from . import serializers
 from . import models
+from account import permissions as user_perm
 
 
 # Subject
@@ -12,6 +13,7 @@ from . import models
 class SubjectCreateAPIVIew(generics.CreateAPIView):
     queryset = models.Subject.objects.all()
     serializer_class = serializers.SubjectSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # Subject List API View
@@ -30,12 +32,14 @@ class SubjectDetailAPIView(generics.RetrieveAPIView):
 class SubjectUpdateAPIView(generics.UpdateAPIView):
     queryset = models.Subject.objects.all()
     serializer_class = serializers.SubjectSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # Subject Delete API View
 class SubjectDeleteAPIView(generics.DestroyAPIView):
     queryset = models.Subject.objects.all()
     serializer_class = serializers.SubjectSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # StudyCenter
@@ -45,30 +49,35 @@ class SubjectDeleteAPIView(generics.DestroyAPIView):
 class StudyCenterCreateAPIVIew(generics.CreateAPIView):
     queryset = models.StudyCenter.objects.all()
     serializer_class = serializers.StudyCenterSerializer
+    permission_classes = [user_perm.IsDirector]
 
 
 # StudyCenter List API View
 class StudyCenterListAPIView(generics.ListAPIView):
     queryset = models.StudyCenter.objects.all()
     serializer_class = serializers.StudyCenterSerializer
+    permission_classes = [user_perm.IsDirector]
 
 
 # StudyCenter Detail API View
 class StudyCenterDetailAPIView(generics.RetrieveAPIView):
     queryset = models.StudyCenter
     serializer_class = serializers.StudyCenterSerializer
+    permission_classes = [user_perm.IsDirector]
 
 
 # StudyCenter Update API View
 class StudyCenterUpdateAPIView(generics.UpdateAPIView):
     queryset = models.StudyCenter.objects.all()
     serializer_class = serializers.StudyCenterSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # StudyCenter Delete API View
 class StudyCenterDeleteAPIView(generics.DestroyAPIView):
     queryset = models.StudyCenter.objects.all()
     serializer_class = serializers.StudyCenterSerializer
+    permission_classes = [user_perm.IsDirector]
 
 
 # SubjectGroup
@@ -78,30 +87,39 @@ class StudyCenterDeleteAPIView(generics.DestroyAPIView):
 class SubjectGroupCreateAPIVIew(generics.CreateAPIView):
     queryset = models.SubjectGroup.objects.all()
     serializer_class = serializers.SubjectGroupSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # SubjectGroup List API View
 class SubjectGroupListAPIView(generics.ListAPIView):
     queryset = models.SubjectGroup.objects.all()
     serializer_class = serializers.SubjectGroupSerializer
+    permission_classes = [
+        user_perm.IsDirectorOrAdminstrator | user_perm.IsTeacher
+    ]
 
 
 # SubjectGroup Detail API View
 class SubjectGroupDetailAPIView(generics.RetrieveAPIView):
     queryset = models.SubjectGroup
     serializer_class = serializers.SubjectGroupSerializer
+    permission_classes = [
+        user_perm.IsDirectorOrAdminstrator | user_perm.IsTeacher
+    ]
 
 
 # SubjectGroup Update API View
 class SubjectGroupUpdateAPIView(generics.UpdateAPIView):
     queryset = models.SubjectGroup.objects.all()
     serializer_class = serializers.SubjectGroupSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # SubjectGroup Delete API View
 class SubjectGroupDeleteAPIView(generics.DestroyAPIView):
     queryset = models.SubjectGroup.objects.all()
     serializer_class = serializers.SubjectGroupSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # StudyDay
@@ -111,6 +129,7 @@ class SubjectGroupDeleteAPIView(generics.DestroyAPIView):
 class StudyDayCreateAPIVIew(generics.CreateAPIView):
     queryset = models.StudyDay.objects.all()
     serializer_class = serializers.StudyDaySerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # StudyDay List API View
@@ -129,12 +148,15 @@ class StudyDayDetailAPIView(generics.RetrieveAPIView):
 class StudyDayUpdateAPIView(generics.UpdateAPIView):
     queryset = models.StudyDay.objects.all()
     serializer_class = serializers.StudyDaySerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # StudyDay Delete API View
 class StudyDayDeleteAPIView(generics.DestroyAPIView):
     queryset = models.StudyDay.objects.all()
     serializer_class = serializers.StudyDaySerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
+
 
 # Time
 
@@ -143,6 +165,7 @@ class StudyDayDeleteAPIView(generics.DestroyAPIView):
 class TimeCreateAPIVIew(generics.CreateAPIView):
     queryset = models.Time.objects.all()
     serializer_class = serializers.TimeSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # Time List API View
@@ -153,7 +176,7 @@ class TimeListAPIView(generics.ListAPIView):
 
 # Time Detail API View
 class TimeDetailAPIView(generics.RetrieveAPIView):
-    queryset = models.Time
+    queryset = models.Time.objects.all()
     serializer_class = serializers.TimeSerializer
 
 
@@ -161,12 +184,14 @@ class TimeDetailAPIView(generics.RetrieveAPIView):
 class TimeUpdateAPIView(generics.UpdateAPIView):
     queryset = models.Time.objects.all()
     serializer_class = serializers.TimeSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # Time Delete API View
 class TimeDeleteAPIView(generics.DestroyAPIView):
     queryset = models.Time.objects.all()
     serializer_class = serializers.TimeSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # Day
@@ -176,6 +201,7 @@ class TimeDeleteAPIView(generics.DestroyAPIView):
 class DayCreateAPIVIew(generics.CreateAPIView):
     queryset = models.Day.objects.all()
     serializer_class = serializers.DaySerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # Day List API View
@@ -194,12 +220,14 @@ class DayDetailAPIView(generics.RetrieveAPIView):
 class DayUpdateAPIView(generics.UpdateAPIView):
     queryset = models.Day.objects.all()
     serializer_class = serializers.DaySerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # Day Delete API View
 class DayDeleteAPIView(generics.DestroyAPIView):
     queryset = models.Day.objects.all()
     serializer_class = serializers.DaySerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # Room
@@ -209,6 +237,7 @@ class DayDeleteAPIView(generics.DestroyAPIView):
 class RoomCreateAPIVIew(generics.CreateAPIView):
     queryset = models.Room.objects.all()
     serializer_class = serializers.RoomSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # Room List API View
@@ -227,9 +256,11 @@ class RoomDetailAPIView(generics.RetrieveAPIView):
 class RoomUpdateAPIView(generics.UpdateAPIView):
     queryset = models.Room.objects.all()
     serializer_class = serializers.RoomSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # Region Delete API View
 class RoomDeleteAPIView(generics.DestroyAPIView):
     queryset = models.Room.objects.all()
     serializer_class = serializers.RoomSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
