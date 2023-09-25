@@ -29,5 +29,6 @@ urlpatterns = [
         'redoc', cache_timeout=0), name='schema-redoc'),
 
     path('api/', include('account.urls')),
-    path('api/', include('study_center.urls'))
+    path('api/', include('study_center.urls')),
+    path('api/', include('letter.urls')),
 ]
