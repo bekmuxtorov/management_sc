@@ -64,7 +64,7 @@ class AdminstratorRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
         fields = ('phone_number', 'full_name',
-                  'passport_or_id', 'passport_or_id_number', 'password', 'password2')
+                  'passport_or_id', 'passport_or_id_number', 'study_center', 'password', 'password2')
 
         extra_kwargs = {
             'password': {'write_only': True},
@@ -74,6 +74,7 @@ class AdminstratorRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         phone_number = validated_data.get('phone_number')
         full_name = validated_data.get('full_name')
+        study_center = validated_data.get('study_center')
         passport_or_id = validated_data.get('passport_or_id')
         passport_or_id_number = validated_data.get('passport_or_id_number')
         password = validated_data.get('password')
@@ -84,6 +85,7 @@ class AdminstratorRegisterSerializer(serializers.ModelSerializer):
                 type='adminstrator',
                 phone_number=phone_number,
                 full_name=full_name,
+                study_center=study_center,
                 passport_or_id=passport_or_id,
                 passport_or_id_number=passport_or_id_number
             )
