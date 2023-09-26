@@ -377,6 +377,42 @@ class StudentRegisterAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Adminstrator list api
+class AdminstratorListAPIView(generics.ListAPIView):
+    queryset = models.User.objects.filter(type='adminstrator')
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
+    serializer_class = serializers.AdminstratorRegisterSerializer
+
+
+# Adminstrator detail api
+class AdminstratorDetailAPIView(generics.GenericAPIView):
+    queryset = models.User.objects.filter(type='adminstrator')
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
+    serializer_class = serializers.AdminstratorRegisterSerializer
+
+
+# Adminstrator update api
+class AdminstratorUpdateAPIView(generics.UpdateAPIView):
+    queryset = models.User.objects.filter(type='adminstrator')
+    permission_classes = [user_perm.IsDirector]
+    serializer_class = serializers.AdminstratorRegisterSerializer
+
+
+# Adminstrator delete api
+class AdminstratorDeleteAPIView(generics.UpdateAPIView):
+    queryset = models.User.objects.filter(type='adminstrator')
+    permission_classes = [user_perm.IsDirector]
+    serializer_class = serializers.AdminstratorRegisterSerializer
+
+
+class TeacherUserListAPIView(generics.ListAPIView):
+    pass
+
+
+class StudentUserListAPIView(generics.ListAPIView):
+    pass
+
+
 # Region
 
 
