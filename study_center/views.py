@@ -1,3 +1,5 @@
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import render
 from rest_framework import generics
 
@@ -20,6 +22,8 @@ class SubjectCreateAPIVIew(generics.CreateAPIView):
 class SubjectListAPIView(generics.ListAPIView):
     queryset = models.Subject.objects.all()
     serializer_class = serializers.SubjectSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ('name',)
 
 
 # Subject Detail API View
@@ -57,6 +61,9 @@ class StudyCenterListAPIView(generics.ListAPIView):
     queryset = models.StudyCenter.objects.all()
     serializer_class = serializers.StudyCenterSerializer
     permission_classes = [user_perm.IsDirector]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ('name', 'description')
+    filterset_fields = ('region', 'district', 'status')
 
 
 # StudyCenter Detail API View
@@ -97,6 +104,15 @@ class SubjectGroupListAPIView(generics.ListAPIView):
     permission_classes = [
         user_perm.IsDirectorOrAdminstrator | user_perm.IsTeacher
     ]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = (
+        'study_center', 'teacher',
+        'subject', 'room', 'study_day'
+    )
+    search_fields = (
+        'name', 'study_center', 'price',
+        'teacher__name', 'room__name', 'study_center__name'
+    )
 
 
 # SubjectGroup Detail API View
@@ -136,6 +152,9 @@ class StudyDayCreateAPIVIew(generics.CreateAPIView):
 class StudyDayListAPIView(generics.ListAPIView):
     queryset = models.StudyDay.objects.all()
     serializer_class = serializers.StudyDaySerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ('day__name', 'time__name')
+    filterset_fields = ('day', 'time', 'day__name', 'time__name')
 
 
 # StudyDay Detail API View
@@ -172,6 +191,8 @@ class TimeCreateAPIVIew(generics.CreateAPIView):
 class TimeListAPIView(generics.ListAPIView):
     queryset = models.Time.objects.all()
     serializer_class = serializers.TimeSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ('name')
 
 
 # Time Detail API View
@@ -208,6 +229,8 @@ class DayCreateAPIVIew(generics.CreateAPIView):
 class DayListAPIView(generics.ListAPIView):
     queryset = models.Day.objects.all()
     serializer_class = serializers.DaySerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ('name')
 
 
 # Day Detail API View
@@ -244,6 +267,9 @@ class RoomCreateAPIVIew(generics.CreateAPIView):
 class RoomListAPIView(generics.ListAPIView):
     queryset = models.Room.objects.all()
     serializer_class = serializers.RoomSerializer
+    filter_backends = [filters.SearchFilter]
+    filterset_fields = ('name', 'study_center', 'teacher')
+    search_fields = ('name', 'room_number', 'teacher__name')
 
 
 # Room Detail API View
