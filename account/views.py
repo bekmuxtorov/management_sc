@@ -1,3 +1,4 @@
+from rest_framework.filters import SearchFilter
 from django.contrib.auth import authenticate
 from rest_framework import generics
 from rest_framework import status
@@ -5,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
+from django_filters.rest_framework import DjangoFilterBackend
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -377,15 +379,21 @@ class StudentRegisterAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Adminstrator
+
+
 # Adminstrator list api
 class AdminstratorListAPIView(generics.ListAPIView):
     queryset = models.User.objects.filter(type='adminstrator')
     permission_classes = [user_perm.IsDirectorOrAdminstrator]
     serializer_class = serializers.AdminstratorRegisterSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ('passport_or_id', 'study_center', 'is_phone_verified')
+    search_fields = ('full_name', 'phone_number', 'passport_or_id_number')
 
 
 # Adminstrator detail api
-class AdminstratorDetailAPIView(generics.GenericAPIView):
+class AdminstratorDetailAPIView(generics.RetrieveAPIView):
     queryset = models.User.objects.filter(type='adminstrator')
     permission_classes = [user_perm.IsDirectorOrAdminstrator]
     serializer_class = serializers.AdminstratorRegisterSerializer
@@ -399,14 +407,43 @@ class AdminstratorUpdateAPIView(generics.UpdateAPIView):
 
 
 # Adminstrator delete api
-class AdminstratorDeleteAPIView(generics.UpdateAPIView):
+class AdminstratorDeleteAPIView(generics.DestroyAPIView):
     queryset = models.User.objects.filter(type='adminstrator')
     permission_classes = [user_perm.IsDirector]
     serializer_class = serializers.AdminstratorRegisterSerializer
 
 
-class TeacherUserListAPIView(generics.ListAPIView):
-    pass
+# Teacher
+
+
+# Teacher list api view
+class TeacherListAPIView(generics.ListAPIView):
+    queryset = models.User.objects.filter(type='teacher').all()
+    serializer_class = serializers.TeacherRegisterSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    filterset_fields = ('passport_or_id', 'study_center', 'is_phone_verified')
+    search_fields = ('full_name', 'phone_number', 'passport_or_id_number')
+
+
+# Teacher detail api view
+class TeacherDetailAPIView(generics.RetrieveAPIView):
+    queryset = models.User.objects.filter(type='teacher').all()
+    serializer_class = serializers.TeacherRegisterSerializer
+
+
+# Teacher update api view
+class TeacherUpdateAPIView(generics.UpdateAPIView):
+    queryset = models.User.objects.filter(type='teacher').all()
+    serializer_class = serializers.TeacherRegisterSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
+
+
+# Teacher delete api view
+class TeacherDeleteAPIView(generics.DestroyAPIView):
+    queryset = models.User.objects.filter(type='teacher').all()
+    serializer_class = serializers.TeacherRegisterSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 class StudentUserListAPIView(generics.ListAPIView):
