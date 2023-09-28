@@ -146,6 +146,14 @@ class SubjectGroup(models.Model):
 
 
 class Time(models.Model):
+    study_center = models.ForeignKey(
+        to=StudyCenter,
+        on_delete=models.CASCADE,
+        related_name='times',
+        verbose_name=_("Study center"),
+        blank=True,
+        null=True
+    )
     name = models.CharField(_('Name'), max_length=20)
 
     def __str__(self):
@@ -168,6 +176,14 @@ class Day(models.Model):
 
 
 class StudyDay(models.Model):
+    study_center = models.ForeignKey(
+        to=StudyCenter,
+        on_delete=models.CASCADE,
+        related_name='study_day',
+        verbose_name=_("Study center"),
+        blank=True,
+        null=True
+    )
     day = models.ForeignKey(
         to='study_center.Day',
         on_delete=models.CASCADE,
