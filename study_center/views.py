@@ -153,8 +153,9 @@ class StudyDayListAPIView(generics.ListAPIView):
     queryset = models.StudyDay.objects.all()
     serializer_class = serializers.StudyDaySerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    search_fields = ('day__name', 'time__name')
-    filterset_fields = ('day', 'time', 'day__name', 'time__name')
+    search_fields = ('day__name', 'time__name', 'study_center__name')
+    filterset_fields = ('day', 'time', 'day__name',
+                        'time__name', 'study_center__name')
 
 
 # StudyDay Detail API View
@@ -191,8 +192,9 @@ class TimeCreateAPIVIew(generics.CreateAPIView):
 class TimeListAPIView(generics.ListAPIView):
     queryset = models.Time.objects.all()
     serializer_class = serializers.TimeSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ('name')
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ('name', 'study_center__name')
+    filterset_fields = ('study_center__name',)
 
 
 # Time Detail API View
