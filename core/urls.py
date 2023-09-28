@@ -31,4 +31,5 @@ urlpatterns = [
     path('api/', include('account.urls')),
     path('api/', include('study_center.urls')),
     path('api/', include('letter.urls')),
+    path('api/', include('payment.urls')),
 ]
