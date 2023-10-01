@@ -30,6 +30,6 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('to_excel/', views.import_excel),
+    #     path('to_excel/', views.import_excel),
     path('add_areas/', views.add_regions, name='add_regions')
 ]
