@@ -1,7 +1,7 @@
 from rest_framework.decorators import permission_classes
 from django.http import HttpResponse
 from utils.add_data import areas
-from .to_excel import to_excel
+# from .to_excel import to_excel
 from rest_framework.filters import SearchFilter
 from django.contrib.auth import authenticate
 from rest_framework import generics
@@ -520,9 +520,9 @@ class DistrictDeleteAPIView(generics.DestroyAPIView):
     serializer_class = serializers.DistrictSerializer
 
 
-def import_excel(request):
-    students = models.StudentUser.objects.all()
-    path = to_excel(students)
+# def import_excel(request):
+#     students = models.StudentUser.objects.all()
+#     path = to_excel(students)
 
 
 @permission_classes(user_perm.IsSuperAdmin)
