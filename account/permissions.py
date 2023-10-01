@@ -3,6 +3,14 @@ from rest_framework.response import Response
 from .models import USER_TYPE
 
 
+class IsSuperAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+        return False
+
+
 class IsDirectorOrAdminstrator(permissions.BasePermission):
     def has_permission(self, request, view):
         user = request.user
