@@ -1,3 +1,7 @@
+from rest_framework.decorators import permission_classes
+from django.http import HttpResponse
+from utils.add_data import areas
+from .to_excel import to_excel
 from rest_framework.filters import SearchFilter
 from django.contrib.auth import authenticate
 from rest_framework import generics
@@ -514,3 +518,16 @@ class DistrictUpdateAPIView(generics.UpdateAPIView):
 class DistrictDeleteAPIView(generics.DestroyAPIView):
     queryset = models.District.objects.all()
     serializer_class = serializers.DistrictSerializer
+
+
+def import_excel(request):
+    students = models.StudentUser.objects.all()
+    path = to_excel(students)
+
+
+@permission_classes(user_perm.IsSuperAdmin)
+def add_regions(request):
+    if not models.Region.objects.all().exists():
+        areas()
+        return HttpResponse('Add successful')
+    return HttpResponse('Datas exists')
