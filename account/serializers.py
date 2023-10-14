@@ -108,7 +108,7 @@ class TeacherRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.TeacherUser
-        fields = ('phone_number', 'full_name',
+        fields = ('id', 'phone_number', 'full_name',
                   'passport_or_id', 'passport_or_id_number', 'subject', 'salary_percentage', 'password', 'password2')
 
         extra_kwargs = {
