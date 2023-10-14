@@ -449,8 +449,35 @@ class TeacherDeleteAPIView(generics.DestroyAPIView):
     permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
-class StudentUserListAPIView(generics.ListAPIView):
-    pass
+# Students
+
+
+# Student list api view
+class StudentListAPIView(generics.ListAPIView):
+    queryset = models.User.objects.filter(type='student').all()
+    serializer_class = serializers.StudentRegisterSerializer
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    filterset_fields = ('passport_or_id', 'study_center', 'is_phone_verified')
+    search_fields = ('full_name', 'phone_number', 'passport_or_id_number')
+
+
+# Student detail api view
+class StudentDetailAPIView(generics.GenericAPIView):
+    queryset = models.User.objects.filter(type='student').all()
+    serializer_class = serializers.StudentRegisterSerializer
+
+
+# Student update api view
+class StudentUpdateAPIView(generics.UpdateAPIView):
+    queryset = models.User.objects.filter(type='student').all()
+    serializer_class = serializers.StudentRegisterSerializer
+
+
+# Student delete api view
+class StudentDeleteAPIView(generics.DestroyAPIView):
+    queryset = models.User.objects.filter(type='student').all()
+    serializer_class = serializers.StudentRegisterSerializer
+    permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # Region

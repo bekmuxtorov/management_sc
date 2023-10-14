@@ -27,8 +27,9 @@ urlpatterns = [
     path('teachers/<int:pk>/update/', views.TeacherUpdateAPIView.as_view()),
     path('teachers/<int:pk>/delete/', views.TeacherDeleteAPIView.as_view()),
 
-]
-
-urlpatterns += [
-    #     path('to_excel/', views.import_excel),
+    # Student
+    path('students/', views.StudentListAPIView.as_view()),
+    path('students/<int:pk>/', views.StudentDetailAPIView.as_view()),
+    path('students/<int:pk>/update/', views.StudentUpdateAPIView.as_view()),
+    path('students/<int:pk>/delete/', views.StudentDeleteAPIView.as_view()),
 ]
