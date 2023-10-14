@@ -462,7 +462,7 @@ class StudentListAPIView(generics.ListAPIView):
 
 
 # Student detail api view
-class StudentDetailAPIView(generics.GenericAPIView):
+class StudentDetailAPIView(generics.RetrieveAPIView):
     queryset = models.User.objects.filter(type='student').all()
     serializer_class = serializers.StudentRegisterSerializer
 
