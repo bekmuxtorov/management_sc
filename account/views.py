@@ -1,4 +1,3 @@
-from rest_framework.decorators import permission_classes
 from django.http import HttpResponse
 # from .to_excel import to_excel
 from rest_framework.filters import SearchFilter
@@ -177,6 +176,7 @@ class AdminstratorRegisterAPIView(APIView):
                 "full_name": openapi.Schema(type=openapi.TYPE_STRING, description='Full Name'),
                 "passport_or_id": openapi.Schema(type=openapi.TYPE_STRING, enum=['passport', 'document_id'], description='Passport or ID'),
                 "passport_or_id_number": openapi.Schema(type=openapi.TYPE_STRING, description="Password or id number"),
+                'study_center': openapi.Schema(type=openapi.TYPE_STRING, description='Study center'),
                 'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
                 'password2': openapi.Schema(type=openapi.TYPE_STRING, description='Password2'),
             }
@@ -217,6 +217,10 @@ class AdminstratorRegisterAPIView(APIView):
                 'type': user.type,
                 'phone_number': user.phone_number,
                 'full_name': user.full_name,
+                'study_center': {
+                    'id': user.study_center.id,
+                    'name': user.study_center.name 
+                },
                 'passport_or_id': user.passport_or_id,
                 'passport_or_id_number': user.passport_or_id_number,
                 'is_phone_number': user.is_phone_verified,
@@ -243,6 +247,7 @@ class TeacherRegisterAPIView(APIView):
                 "passport_or_id_number": openapi.Schema(type=openapi.TYPE_STRING, description="Password or id number"),
                 "subject": openapi.Schema(type=openapi.TYPE_INTEGER, description='The id field of the object of the Subject model'),
                 'salary_percentage': openapi.Schema(type=openapi.TYPE_STRING, description='Salary percentage'),
+                'study_center': openapi.Schema(type=openapi.TYPE_STRING, description='Study center'),
                 'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
                 'password2': openapi.Schema(type=openapi.TYPE_STRING, description='Password2'),
             }
@@ -252,19 +257,18 @@ class TeacherRegisterAPIView(APIView):
                 description="User login",
                 examples={
                     'application/json': {
-                        "token": "Token 1cd055696",
-                        "type": "teacher",
-                        "phone_number": "+998907778111",
-                        "full_name": "Palonchiyev Pistonchi",
-                        "passport_or_id": "passport",
-                        "passport_or_id_number": "asdf",
-                        "is_phone_number": False,
-                        'subject': {
-                            'id': 1,
-                            'name': 'Physics'
-                        },
-                        'salary_percentage': '40.0',
-                        "created_at": "2023-09-17T08:44:15.663502Z"
+                            "token": "Token 8734c58629f382f9bdd271c7006bad952b134a01",
+                            "type": "student",
+                            "phone_number": "+998901112547",
+                            "full_name": "Student",
+                            "passport_or_id": "passport",
+                            "passport_or_id_number": "000222",
+                            "is_phone_number": False,
+                            "created_at": "2023-10-21T14:02:05.024852Z",
+                            "subject": {
+                                "id": 1,
+                                "name": "Matematika"
+                            }
                     }
                 }
             ),
@@ -285,7 +289,7 @@ class TeacherRegisterAPIView(APIView):
             if models.User.objects.filter(phone_number=phone_number).exists():
                 return Response(data={'error': 'Registered user'}, status=status.HTTP_400_BAD_REQUEST)
 
-            teacher_user, user = serializer.save()
+            user = serializer.save()
             token = Token.objects.get_or_create(user=user)[0].key
             request_data = {
                 'token': f"Token {token}",
@@ -296,11 +300,15 @@ class TeacherRegisterAPIView(APIView):
                 'passport_or_id_number': user.passport_or_id_number,
                 'is_phone_number': user.is_phone_verified,
                 'created_at': user.created_at,
-                'subject': {
-                    'id': teacher_user.subject.id,
-                    'name': teacher_user.subject.name
+                'study_center': {
+                    'id': user.study_center.id,
+                    'name': user.study_center.name
                 },
-                'salary_percentage': teacher_user.salary_percentage
+                'subject': {
+                    'id': user.subject.id,
+                    'name': user.subject.name
+                },
+                'salary_percentage': user.salary_percentage
             }
             return Response(request_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -320,6 +328,7 @@ class StudentRegisterAPIView(APIView):
                 "full_name": openapi.Schema(type=openapi.TYPE_STRING, description='Full Name'),
                 "passport_or_id": openapi.Schema(type=openapi.TYPE_STRING, enum=['passport', 'document_id'], description='Passport or ID'),
                 "passport_or_id_number": openapi.Schema(type=openapi.TYPE_STRING, description="Password or id number"),
+                'study_center': openapi.Schema(type=openapi.TYPE_STRING, description='Study center'),
                 "subject": openapi.Schema(type=openapi.TYPE_INTEGER, description='The id field of the object of the Subject model'),
                 'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
                 'password2': openapi.Schema(type=openapi.TYPE_STRING, description='Password2'),
@@ -337,6 +346,7 @@ class StudentRegisterAPIView(APIView):
                         "passport_or_id": "passport",
                         "passport_or_id_number": "asdf",
                         "is_phone_number": False,
+                        'study_center': 'a',
                         'subject': {
                             'id': 1,
                             'name': 'Physics'
@@ -362,7 +372,7 @@ class StudentRegisterAPIView(APIView):
             if models.User.objects.filter(phone_number=phone_number).exists():
                 return Response(data={'error': 'Registered user'}, status=status.HTTP_400_BAD_REQUEST)
 
-            student_user, user = serializer.save()
+            user = serializer.save()
             token = Token.objects.get_or_create(user=user)[0].key
             request_data = {
                 'token': f"Token {token}",
@@ -373,9 +383,13 @@ class StudentRegisterAPIView(APIView):
                 'passport_or_id_number': user.passport_or_id_number,
                 'is_phone_number': user.is_phone_verified,
                 'created_at': user.created_at,
+                'study_center': {
+                    'id': user.study_center.id,
+                    'name': user.study_center.name
+                },
                 'subject': {
-                    'id': student_user.subject.id,
-                    'name': student_user.subject.name
+                    'id': user.subject.id,
+                    'name': user.subject.name
                 },
             }
             return Response(request_data, status=status.HTTP_201_CREATED)
@@ -406,7 +420,7 @@ class AdminstratorDetailAPIView(generics.RetrieveAPIView):
 class AdminstratorUpdateAPIView(generics.UpdateAPIView):
     queryset = models.User.objects.filter(type='adminstrator')
     permission_classes = [user_perm.IsDirector]
-    serializer_class = serializers.AdminstratorRegisterSerializer
+    serializer_class = serializers.UserUpdateSerializer
 
 
 # Adminstrator delete api
@@ -422,7 +436,7 @@ class AdminstratorDeleteAPIView(generics.DestroyAPIView):
 # Teacher list api view
 class TeacherListAPIView(generics.ListAPIView):
     queryset = models.User.objects.filter(type='teacher').all()
-    serializer_class = serializers.TeacherRegisterSerializer
+    serializer_class = serializers.TeacherSerializer
     permission_classes = [user_perm.IsDirectorOrAdminstrator]
     filter_backends = [SearchFilter, DjangoFilterBackend]
     filterset_fields = ('passport_or_id', 'study_center', 'is_phone_verified')
@@ -432,20 +446,20 @@ class TeacherListAPIView(generics.ListAPIView):
 # Teacher detail api view
 class TeacherDetailAPIView(generics.RetrieveAPIView):
     queryset = models.User.objects.filter(type='teacher').all()
-    serializer_class = serializers.TeacherRegisterSerializer
+    serializer_class = serializers.TeacherSerializer
 
 
 # Teacher update api view
 class TeacherUpdateAPIView(generics.UpdateAPIView):
     queryset = models.User.objects.filter(type='teacher').all()
-    serializer_class = serializers.TeacherRegisterSerializer
+    serializer_class = serializers.UserUpdateSerializer
     permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
 # Teacher delete api view
 class TeacherDeleteAPIView(generics.DestroyAPIView):
     queryset = models.User.objects.filter(type='teacher').all()
-    serializer_class = serializers.TeacherRegisterSerializer
+    serializer_class = serializers.TeacherSerializer
     permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
@@ -455,7 +469,7 @@ class TeacherDeleteAPIView(generics.DestroyAPIView):
 # Student list api view
 class StudentListAPIView(generics.ListAPIView):
     queryset = models.User.objects.filter(type='student').all()
-    serializer_class = serializers.StudentRegisterSerializer
+    serializer_class = serializers.StudentSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend]
     filterset_fields = ('passport_or_id', 'study_center', 'is_phone_verified')
     search_fields = ('full_name', 'phone_number', 'passport_or_id_number')
@@ -464,19 +478,19 @@ class StudentListAPIView(generics.ListAPIView):
 # Student detail api view
 class StudentDetailAPIView(generics.RetrieveAPIView):
     queryset = models.User.objects.filter(type='student').all()
-    serializer_class = serializers.StudentRegisterSerializer
+    serializer_class = serializers.StudentSerializer
 
 
 # Student update api view
 class StudentUpdateAPIView(generics.UpdateAPIView):
     queryset = models.User.objects.filter(type='student').all()
-    serializer_class = serializers.StudentRegisterSerializer
+    serializer_class = serializers.UserUpdateSerializer
 
 
 # Student delete api view
 class StudentDeleteAPIView(generics.DestroyAPIView):
     queryset = models.User.objects.filter(type='student').all()
-    serializer_class = serializers.StudentRegisterSerializer
+    serializer_class = serializers.StudentSerializer
     permission_classes = [user_perm.IsDirectorOrAdminstrator]
 
 
@@ -544,8 +558,3 @@ class DistrictUpdateAPIView(generics.UpdateAPIView):
 class DistrictDeleteAPIView(generics.DestroyAPIView):
     queryset = models.District.objects.all()
     serializer_class = serializers.DistrictSerializer
-
-
-# def import_excel(request):
-#     students = models.StudentUser.objects.all()
-#     path = to_excel(students)

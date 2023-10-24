@@ -1,6 +1,7 @@
+import json
 from rest_framework import serializers
-from study_center.serializers import SubjectSerializer
-
+from study_center.serializers import StudyCenterNameSerializer, SubjectNameSerializer
+from study_center.models import StudyCenter, Subject
 from . import models
 
 
@@ -63,7 +64,7 @@ class AdminstratorRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.User
-        fields = ('phone_number', 'full_name',
+        fields = ('id', 'phone_number', 'full_name', 'study_center', 'is_phone_verified',
                   'passport_or_id', 'passport_or_id_number', 'study_center', 'password', 'password2')
 
         extra_kwargs = {
@@ -98,105 +99,111 @@ class AdminstratorRegisterSerializer(serializers.ModelSerializer):
             })
 
 
-class TeacherRegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(required=True, write_only=True)
-    password2 = serializers.CharField(required=True, write_only=True)
+class TeacherRegisterSerializer(serializers.Serializer):
+    password = serializers.CharField(write_only=True, required=True)
+    password2 = serializers.CharField(write_only=True, required=True)
+
+    salary_percentage = serializers.FloatField()
     phone_number = serializers.CharField(required=True)
-    full_name = serializers.CharField()
+    full_name = serializers.CharField(required=True)
+    subject = serializers.CharField()
+    study_center = serializers.CharField()
     passport_or_id = serializers.CharField()
     passport_or_id_number = serializers.CharField()
 
-    class Meta:
-        model = models.TeacherUser
-        fields = ('id', 'phone_number', 'full_name',
-                  'passport_or_id', 'passport_or_id_number', 'subject', 'salary_percentage', 'password', 'password2')
-
-        extra_kwargs = {
-            'password': {'write_only': True},
-            'password2': {'write_only': True},
-        }
-
     def create(self, validated_data):
-        phone_number = validated_data.get('phone_number')
-        full_name = validated_data.get('full_name')
-        passport_or_id = validated_data.get('passport_or_id')
-        passport_or_id_number = validated_data.get('passport_or_id_number')
         password = validated_data.get('password')
-        password2 = validated_data.get('password2')
+        password2 = validated_data.pop('password2')
+        study_center_id = validated_data.pop('study_center')
+        subject_id = validated_data.pop('subject')
 
-        subject = validated_data.get('subject')
-        salary_percentage = validated_data.get('salary_percentage')
+        study_center = StudyCenter.objects.filter(id=study_center_id).first()
+        subject = Subject.objects.filter(id=subject_id).first()
 
         if password == password2:
             user = models.User(
                 type='teacher',
-                phone_number=phone_number,
-                full_name=full_name,
-                passport_or_id=passport_or_id,
-                passport_or_id_number=passport_or_id_number
+                study_center=study_center,
+                subject=subject,
+                **validated_data
             )
             user.set_password(password)
             user.save()
-
-            teacher_user = models.TeacherUser(
-                user=user,
-                subject=subject,
-                salary_percentage=salary_percentage
-            )
-            teacher_user.save()
-            return teacher_user, user
+            return user
         else:
             raise serializers.ValidationError({
                 'error': 'Both passwords do not match'
             })
 
+    def update(self, instance, validated_data):
+        print(''.join(['<', '='*10, '>', 'asdasdf']))
+        return super().update(instance, validated_data)
 
-class StudentRegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True)
-    password2 = serializers.CharField(write_only=True, required=True)
-    phone_number = serializers.CharField(required=True)
-    full_name = serializers.CharField()
-    full_name = serializers.CharField()
-    passport_or_id = serializers.CharField()
-    passport_or_id_number = serializers.CharField()
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        exclude = ('password', 'last_login', 'is_superuser',
+                   'groups', 'user_permissions', 'is_staff')
+
+
+class TeacherSerializer(serializers.ModelSerializer):
+    study_center = StudyCenterNameSerializer()
+    subject = SubjectNameSerializer()
 
     class Meta:
-        model = models.StudentUser
-        fields = ('phone_number', 'full_name',
-                  'passport_or_id', 'passport_or_id_number', 'subject',  'password', 'password2')
+        model = models.User
+        fields = ('id', 'phone_number', 'full_name', 'is_phone_verified', 'study_center',
+                  'passport_or_id', 'passport_or_id_number', 'subject', 'salary_percentage')
+
         extra_kwargs = {
             'password': {'write_only': True},
             'password2': {'write_only': True},
         }
 
-    def create(self, validated_data):
-        phone_number = validated_data.get('phone_number')
-        full_name = validated_data.get('full_name')
-        passport_or_id = validated_data.get('passport_or_id')
-        passport_or_id_number = validated_data.get('passport_or_id_number')
-        password = validated_data.get('password')
-        password2 = validated_data.get('password2')
 
-        subject = validated_data.get('subject')
+class StudentRegisterSerializer(serializers.Serializer):
+    password = serializers.CharField(write_only=True, required=True)
+    password2 = serializers.CharField(write_only=True, required=True)
+
+    phone_number = serializers.CharField(required=True)
+    full_name = serializers.CharField(required=True)
+    subject = serializers.CharField(required=True)
+    study_center = serializers.CharField(required=True)
+    passport_or_id = serializers.CharField(required=True)
+    passport_or_id_number = serializers.CharField(required=True)
+
+    def create(self, validated_data):
+        password = validated_data.get('password')
+        password2 = validated_data.pop('password2')
+        study_center_id = validated_data.pop('study_center')
+        subject_id = validated_data.pop('subject')
+
+        study_center = StudyCenter.objects.filter(id=study_center_id).first()
+        subject = Subject.objects.filter(id=subject_id).first()
 
         if password == password2:
             user = models.User(
                 type='student',
-                phone_number=phone_number,
-                full_name=full_name,
-                passport_or_id=passport_or_id,
-                passport_or_id_number=passport_or_id_number
+                study_center=study_center,
+                subject=subject,
+                **validated_data
             )
             user.set_password(password)
             user.save()
 
-            student_user = models.TeacherUser(
-                user=user,
-                subject=subject,
-            )
-            student_user.save()
-            return student_user, user
-        else:
-            raise serializers.ValidationError({
-                'error': 'Both passwords do not match'
-            })
+            return user
+
+
+class StudentSerializer(serializers.ModelSerializer):
+    study_center = StudyCenterNameSerializer()
+    subject = SubjectNameSerializer()
+
+    class Meta:
+        model = models.User
+        fields = ('id', 'phone_number', 'full_name', 'is_phone_verified', 'subject',  'study_center',
+                  'passport_or_id', 'passport_or_id_number')
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'password2': {'write_only': True},
+        }

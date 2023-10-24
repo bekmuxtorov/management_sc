@@ -72,7 +72,7 @@ class Billing(models.Model):
         related_name='billings'
     )
     student = models.ForeignKey(
-        to="account.StudentUser",
+        to="account.User",
         on_delete=models.CASCADE,
         verbose_name=_('Student'),
         related_name='billings'

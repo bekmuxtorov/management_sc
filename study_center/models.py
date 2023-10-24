@@ -88,16 +88,16 @@ class SubjectGroup(models.Model):
         verbose_name=_('Name')
     )
     teacher = models.ForeignKey(
-        to='account.TeacherUser',
+        to='account.User',
         on_delete=models.CASCADE,
         blank=True,
         null=True,
         verbose_name=_('Teacher'),
-        related_name='subject_groups'
+        related_name='subject_groups_teacher'
     )
     students = models.ManyToManyField(
-        to='account.StudentUser',
-        related_name='subject_groups',
+        to='account.User',
+        related_name='subject_groups_student',
     )
     subject = models.ForeignKey(
         to=Subject,
@@ -214,7 +214,7 @@ class Room(models.Model):
     room_number = models.CharField(_('Room number'), max_length=50)
     room_size = models.IntegerField(_('Room size'))
     teacher = models.ForeignKey(
-        to='account.TeacherUser',
+        to='account.User',
         on_delete=models.CASCADE,
         blank=True,
         null=True,

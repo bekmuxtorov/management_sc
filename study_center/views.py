@@ -1,6 +1,5 @@
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from django.shortcuts import render
 from rest_framework import generics
 
 from . import serializers
@@ -68,7 +67,7 @@ class StudyCenterListAPIView(generics.ListAPIView):
 
 # StudyCenter Detail API View
 class StudyCenterDetailAPIView(generics.RetrieveAPIView):
-    queryset = models.StudyCenter
+    queryset = models.StudyCenter.objects.all()
     serializer_class = serializers.StudyCenterSerializer
     permission_classes = [user_perm.IsDirector]
 

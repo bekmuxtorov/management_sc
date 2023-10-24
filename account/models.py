@@ -120,6 +120,18 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
         null=True
     )
+    subject = models.ForeignKey(
+        to="study_center.Subject",
+        on_delete=models.CASCADE,
+        related_name="user",
+        blank=True,
+        null=True
+    )
+    salary_percentage = models.FloatField(
+        verbose_name=_('Salary percentage'),
+        null=True,
+        blank=True
+    )
 
     USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = ['full_name']
