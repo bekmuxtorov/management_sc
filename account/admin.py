@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .forms import UserChangeForm, UserCreationForm
 from . import models
+from utils.to_excel import to_excel
 
 
 admin.site.site_header = _("Management SC Admin")
@@ -34,14 +35,17 @@ class DistrictAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.User)
-class AccountAdmin(BaseUserAdmin):
+class AccountAdmin(BaseUserAdmin, admin.ModelAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
     list_display = (
         "phone_number",
+        "full_name",
         "type",
-        "created_at",
+        'study_center',
+        'subject',
+        "get_data",
         "is_phone_verified",
         "is_staff"
     )
@@ -91,6 +95,16 @@ class AccountAdmin(BaseUserAdmin):
             obj.type = form.cleaned_data.get('type')
         super().save_model(request, obj, form, change)
 
+    def export_excel(self, request, queryset):
+        return to_excel(queryset)
+
+    def export_pdf(self, request, queryset):
+        pass
+
+    export_pdf.short_description = 'Expert -> PDF'
+    export_excel.short_description = 'Expert -> Excel'
+    actions = [export_excel, export_pdf]
+
 
 @admin.register(models.TeacherUser)
 class TeacherUserAdmin(admin.ModelAdmin):
@@ -108,7 +122,8 @@ class TeacherUserAdmin(admin.ModelAdmin):
 @admin.register(models.StudentUser)
 class StudentUserAdmin(admin.ModelAdmin):
     list_display = ('get_full_name', 'get_study_center', 'subject',)
-    search_fields = ('user__full_name', 'user__study_center', 'subject__name', )
+    search_fields = ('user__full_name',
+                     'user__study_center', 'subject__name', )
     ordering = ('user__study_center', 'subject__name')
     def get_full_name(self, instance): return instance.user.full_name
 

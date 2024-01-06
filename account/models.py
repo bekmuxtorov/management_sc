@@ -138,6 +138,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
+    def get_data(self):
+        return self.created_at.strftime('%d/%m/%Y')
+
     def __str__(self):
         return self.full_name
 
